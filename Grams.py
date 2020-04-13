@@ -1,59 +1,42 @@
-documents = ['Hello, how are you!',
-             'Win money, win from home.',
-             'Call me now.',
-             'Hello, Call hello you tomorrow?']
 
-lower_case_documents = []
-for i in documents:
-    lower_case_documents.append(i.lower())
-print(lower_case_documents)
+#Step1: importing nltk and csv
 
-sans_punctuation_documents = []
-import string
+import nltk
+import csv
 
-for i in lower_case_documents:
-    sans_punctuation_documents.append(''.join(c for c in i if c not in string.punctuation))
+
+#importing ngrams form nltk
+from nltk import ngrams
+
+
+#opening our csv file
+with open('D:\csv\myfile.csv', newline='') as myFile:
+    reader = csv.reader(myFile)
     
-print(sans_punctuation_documents)
-
-
-preprocessed_documents = []
-for i in sans_punctuation_documents:
-    preprocessed_documents.append(i.split(' '))
-print(preprocessed_documents)
-
-
-frequency_list = []
-import pprint
-from collections import Counter
-
-for i in preprocessed_documents:
-    frequency_list.append(Counter(i))
     
-pprint.pprint(frequency_list)
+#reading colums
+    for colums in reader:
+        sentenceOne = colums[0]
+        sentenceTwo = colums[1]
+        sentencThree = colums[2]
+ 
+#defining a function to Generate our Grams....    
+def generate_ngrams(data, num):
+    n_grams = ngrams(nltk.word_tokenize(data), num)
+    return [ ' '.join(grams) for grams in n_grams]
 
 
-import pandas as pd
-documents = ['Hello, how are you!',
-                'Win money, win from home.',
-                'Call me now.',
-                'Hello, Call hello you tomorrow?']
+print("-Uni-Grams Of Our Sentences-")
+print("1st Sentence:", generate_ngrams(sentenceOne, 1))
+print("2nd Sentence: ", generate_ngrams(sentenceTwo, 1))
+print("3rd Sentence:", generate_ngrams(sentencThree, 1),"\n")
 
+print("--Bi-Grams Of Our Sentences--")
+print("1st Sentence:", generate_ngrams(sentenceOne, 2))
+print("2nd Sentence: ", generate_ngrams(sentenceTwo, 2))
+print("3rd Sentence:", generate_ngrams(sentencThree, 2),"\n")
 
-from sklearn.feature_extraction.text import CountVectorizer
-count_vector = CountVectorizer(documents)
-
-
-print(count_vector)
-
-
-count_vector.fit(documents)
-count_vector.get_feature_names()
-
-
-doc_array = count_vector.transform(documents).toarray()
-doc_array
-
-
-frequency_matrix = pd.DataFrame(doc_array,index=documents,columns=count_vector.get_feature_names())
-frequency_matrix
+print("---Tri-Grams Of Our Sentences---")
+print("1st Sentence:", generate_ngrams(sentenceOne, 3))
+print("2nd Sentence: ", generate_ngrams(sentenceTwo, 3))
+print("3rd Sentence:", generate_ngrams(sentencThree, 3),"\n")
